@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  backendApiUrl : "http://localhost:5000/admin/"
+  backendApiUrl : "http://18.188.216.153:5000/admin/"
 
 };

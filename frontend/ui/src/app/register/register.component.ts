@@ -16,7 +16,6 @@ export class RegisterComponent implements OnInit {
   public phone : string;
   public age : string;
   public name: string;
-  status = false;
   userData = {}
 
   ngOnInit(): void {

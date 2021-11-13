@@ -13,35 +13,34 @@
           <div class="form-group">
             <label for="inputName">Name</label>
             <input type="text" class="form-control" id="inputName" placeholder="Name" 
-            [(ngModel)]="name" (click)="status=false" name="name" required>
+            [(ngModel)]="name" name="name" required>
           </div>
           <div class="form-group">
             <label for="inputEmail">Email address</label>
             <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Email" 
-            [(ngModel)]="email" (click)="status=false" name="email" required>
+            [(ngModel)]="email"  name="email" required>
             <small id="emailHelp" class="form-text text-muted"></small>
           </div>
           <div class="form-group">
             <label for="inputPassword">Password</label>
             <input type="password" class="form-control" id="inputPassword" placeholder="Password"
-            [(ngModel)]="password" (click)="status=false" type="password" name="password" required>
+            [(ngModel)]="password"  type="password" name="password" required>
           </div>
           <div class="form-group">
             <label for="inputphone">Phone No.</label>
             <input type="number" class="form-control" id="inputphone" placeholder="Phone"
-            [(ngModel)]="phone" (click)="status=false" name="phone" required>
+            [(ngModel)]="phone"  name="phone" required>
           </div>
           <div class="form-group">
             <label for="inputCountry">Country</label>
             <input type="text" class="form-control" id="inputCountry" placeholder="Country"
-            [(ngModel)]="country" (click)="status=false" name="country" required>
+            [(ngModel)]="country"  name="country" required>
           </div>
           <div class="form-group">
             <label for="inputAge">Age</label>
             <input type="number" class="form-control" id="inputAge" placeholder="Age"
-            [(ngModel)]="age" (click)="status=false" name="age" required>
+            [(ngModel)]="age" name="age" required>
           </div>
-          <div class="form-group" *ngIf="status" style="color: darkred;" id="message"><span style="font-size: medium;">Wrong credentials</span> </div>
           <button type="submit" class="btn btn-secondary" style="width: max-content;" (click)="onSubmit()"><span style="color:black;">Register</span></button>
         </form>
       </div>

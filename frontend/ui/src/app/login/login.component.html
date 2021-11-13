@@ -13,22 +13,22 @@
           <div class="form-group">
             <label for="inputEmail">Email address</label>
             <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Email" 
-            [(ngModel)]="email" (click)="status=false" name="email" required>
+            [(ngModel)]="email"  name="email" required>
             <small id="emailHelp" class="form-text text-muted"></small>
           </div>
           <div class="form-group">
             <label for="inputPassword">Password</label>
             <input type="password" class="form-control" id="inputPassword" placeholder="Password"
-            [(ngModel)]="password" (click)="status=false" name="password" required>
+            [(ngModel)]="password" name="password" required>
           </div>
-          <div class="form-group" *ngIf="status" style="color: darkred;" id="message"><span style="font-size: medium;">Wrong credentials</span> </div>
+          <div class="form-group" style="color: darkred;" id="message"><span style="font-size: medium;">Wrong credentials</span> </div>
           <button type="submit" class="btn btn-secondary" style="width: max-content;" (click)="onSubmit()"><span style="color:black;">Login</span></button>
         </form>
 
         <br>
         <br>
 
-        <button class="btn btn-secondary" style="width: max-content;" (click)="router.navigate(['/register']);"><span style="color:black;">Go to register</span></button>
+        <button class="btn btn-secondary" style="width: max-content;" (click)="goToRegisterPage();"><span style="color:black;">Go to register</span></button>
 
       </div>
       <div class="col-md-4"></div>
