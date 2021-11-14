@@ -151,7 +151,7 @@ export class DashboardComponent implements OnInit {
 
     this.http.delete(environment.backendApiUrl + 'delete_product?id='+this.productID,this.httpOptions).subscribe(data => {
 
-      if(data['status']==201)
+      if(data['status']==200)
       {
         this.getAllProducts();
         this.closeModal('delete');
