@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
@@ -9,7 +8,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list'
-import { NgxAudioPlayerModule } from 'ngx-audio-player';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatRippleModule } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -20,11 +18,9 @@ import { AppRoutingModule } from './app.routing.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatGridListModule } from '@angular/material/grid-list';
-// import { AuthGuard } from './auth.guard'
 import { ChartModule } from 'angular-highcharts';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import {MatTabsModule} from '@angular/material/tabs';
-
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -50,7 +46,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatIconModule,
     MatCardModule,
     MatListModule,
-    NgxAudioPlayerModule,
     MatRippleModule,
     HttpClientModule,
     FormsModule,
@@ -81,7 +76,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatDividerModule,
     MatExpansionModule
   ],
-  // providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

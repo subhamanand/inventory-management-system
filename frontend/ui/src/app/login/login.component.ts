@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -7,41 +7,34 @@ import { environment } from '../../environments/environment';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   constructor(private http: HttpClient,private router:Router) { }
 
-  public email : string
-  public password : string
-  credential_stat : string;
-  login_creds = {}
+  email : string
+  password : string
+  credentialStatus : number;
+  loginCreds = {}
+  wrongCredentials:boolean=false;
 
-  ngOnInit(): void {
-  
-  }
+ 
 
   onSubmit(){
-    this.login_creds = {"username":this.email,"password":this.password};
-    this.http.post(environment.backendApiUrl+'login', this.login_creds).subscribe(data => {
-
-                console.log(data);
-                this.credential_stat = data['status'];
-                console.log(this.credential_stat);
-
-                if(this.credential_stat === '1'){
-
-                  localStorage.setItem('token', data['encodedData']);
-
-                  
-                    this.router.navigate(["dashboard"]);
-               
-                }               
-            })
+    this.loginCreds = {"username":this.email,"password":this.password};
+    this.http.post(environment.backendApiUrl+'login', this.loginCreds).subscribe(data => {
+        this.credentialStatus = data['status'];
+        if(this.credentialStatus == 200){
+          localStorage.setItem('token', data['encodedData']);
+          this.router.navigate(["dashboard"]);
+        }
+        else
+        {
+          this.wrongCredentials=true;
+        }               
+    })
   }
   
   goToRegisterPage()
   {
-
     this.router.navigate(["register"]);
-
   }
 }

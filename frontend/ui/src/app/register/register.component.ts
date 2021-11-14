@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -7,20 +7,17 @@ import { environment } from '../../environments/environment';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent{
   constructor(private http: HttpClient,private router:Router) { }
 
-  public email : string;
-  public password : string;
-  public country : string;
-  public phone : string;
-  public age : string;
-  public name: string;
+  email : string;
+  password : string;
+  country : string;
+  phone : string;
+  age : string;
+  name: string;
   userData = {}
 
-  ngOnInit(): void {
-  
-  }
 
   onSubmit(){
     this.userData = 
@@ -36,12 +33,8 @@ export class RegisterComponent implements OnInit {
 
 
     this.http.post(environment.backendApiUrl+'register', this.userData).subscribe(data => {
-      
-      console.log("response",data);
-      
       this.router.navigate(["login"]);
-            
-            })
+    })
   }
   
 }

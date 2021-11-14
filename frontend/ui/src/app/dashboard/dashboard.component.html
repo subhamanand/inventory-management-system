@@ -6,13 +6,23 @@
 
 <body>
 
-  <nav class="navbar"  >
+  <nav class="navbar">
     <div class="container-fluid nav-color" style="height:50px">
       <div class="navbar-header" style="display: inline-block; ">
         <span style="float: left;font-size: 20px;padding-top: 10px;">
           <b>Inventory Management System</b>
         </span>
       </div>
+      <ul class="nav navbar-nav navbar-right"  >
+      
+        <li style="margin-right:1em; margin-top: 20px;"><span class="glyphicon glyphicon-user"></span> {{username}}</li>
+        <li>
+          <button type="button" class="btn btn-default" style="background-color:#53b6cf; color: white; border-color: #53b6cf; margin-top: 13px;"
+           (click)="logout()"><b><span class="glyphicon glyphicon-log-out" style="margin-right: 4px;"
+            ></span>Logout</b></button>
+        </li>
+       
+      </ul>
 
     </div>
   </nav>
@@ -29,24 +39,25 @@
             <select style="height:10%;" matNativeControl #selectList class="form-control"
             (change)="selectCategory(selectList.value)">
             <option value="all" selected>All</option>
-            <option *ngFor="let product of productList" class="dateSelect-option" value="{{product}}">{{product}}
+            <option *ngFor="let category of productCategoryList" class="dateSelect-option" value="{{category}}">{{category}}
             </option>
             </select>
+
           
         </div>
 
         <div class="row" style="margin-top: 3%;">
 
           <div class="col-md-2"> 
-            <button type="button" class="btn btn-default btn-color-c" id="addPr" (click)="getModal('add')" >Add
+            <button type="button" class="btn btn-default btn-color" id="addPr" (click)="getModal('add')" >Add
               Product</button>
           </div>
           <div class="col-md-2"> 
-            <button type="button" class="btn btn-default btn-color-c" id="updPr" (click)="getModal('update')" >Update
+            <button type="button" class="btn btn-default btn-color" id="updPr" (click)="getModal('update')" >Update
               Product</button>
           </div>
-          <div class="col-md-2" style="margin-left: 4%;"> 
-            <button type="button" class="btn btn-default btn-color-c" id="delPr" (click)="getModal('delete')" >Delete
+          <div class="col-md-2" style="margin-left: 3%;"> 
+            <button type="button" class="btn btn-default btn-color" id="delPr" (click)="getModal('delete')" >Delete
               Product</button>
           </div>
         </div>
@@ -58,12 +69,9 @@
       
         <div class="row">
           <div class="col-md-3">
-            <h2 style="font-family:lato">Product List
+            <h2 style="font-family:lato;font-weight: bold;margin-left: 5%;margin-bottom: 5%;">Product List
             </h2>
-          </div>
-
-          
-       
+          </div>  
         </div>
 
         <div class="col-md-12">
@@ -74,8 +82,6 @@
                 style="font-family: 'Poppins', Lato; color:black">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Category</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Units</th>
@@ -84,8 +90,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let product of products">
-                    <td> {{ product.id }} </td>
-                    <td> {{ product.category }} </td>
+  
                     <td> {{ product.name }} </td>
                     <td> {{ product.description }} </td>
                     <td> {{ product.units}} </td>
@@ -136,7 +141,6 @@
         </div>
       </div>
 
-      <!-- <mat-divider></mat-divider> -->
 
       <div class="row">
 
@@ -149,7 +153,6 @@
           [(ngModel)]="productCategory"  name="productCategory" required>
         </div>
       </div>
-      <!-- <mat-divider></mat-divider> -->
 
 
       <div class="row">
@@ -163,7 +166,6 @@
           [(ngModel)]="productDescription"  name="productDescription" required>
         </div>
       </div>
-      <!-- <mat-divider></mat-divider> -->
                                                                                                    
       <div class="row">
 
@@ -178,9 +180,9 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default btn-color-c" style="margin-left: 3px;margin-top:20px;"
+      <button type="button" class="btn btn-default btn-color" style="margin-left: 3px;margin-top:20px;"
         (click)="addProduct()">Save</button>
-      <button type="button" class="btn btn-default btn-color-c" style="margin-left: 3px;margin-top:20px;"
+      <button type="button" class="btn btn-default btn-color" style="margin-left: 3px;margin-top:20px;"
         (click)="closeModal('add')">Cancel</button>
     </div>
   </div>
@@ -205,7 +207,6 @@
 
           <select style="height:10%;" matNativeControl #selectId class="form-control"
             (change)="selectID(selectId.value)">
-            <!-- <option value="all" selected>All</option> -->
             <option value="" selected disabled>Select Id</option>
             <option *ngFor="let proudctId of productIdList" class="dateSelect-option" value="{{proudctId}}">{{proudctId}}
             </option>
@@ -226,8 +227,6 @@
         </div>
       </div>
 
-      <!-- <mat-divider></mat-divider> -->
-
       <div class="row">
 
         <div class="col-md-3">
@@ -239,7 +238,6 @@
           [(ngModel)]="productCategory"  name="productCategory" required>
         </div>
       </div>
-      <!-- <mat-divider></mat-divider> -->
 
 
       <div class="row">
@@ -253,7 +251,6 @@
           [(ngModel)]="productDescription"  name="productDescription" required>
         </div>
       </div>
-      <!-- <mat-divider></mat-divider> -->
                                                                                                    
       <div class="row">
 
@@ -268,9 +265,9 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default btn-color-c" style="margin-left: 3px;margin-top:20px;"
+      <button type="button" class="btn btn-default btn-color" style="margin-left: 3px;margin-top:20px;"
         (click)="updateProduct()">Update</button>
-      <button type="button" class="btn btn-default btn-color-c" style="margin-left: 3px;margin-top:20px;"
+      <button type="button" class="btn btn-default btn-color" style="margin-left: 3px;margin-top:20px;"
         (click)="closeModal('update')">Cancel</button>
     </div>
   </div>
@@ -353,9 +350,9 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default btn-color-c" style="margin-left: 3px;margin-top:20px;"
+      <button type="button" class="btn btn-default btn-color" style="margin-left: 3px;margin-top:20px;"
         (click)="deleteProduct()">Delete</button>
-      <button type="button" class="btn btn-default btn-color-c" style="margin-left: 3px;margin-top:20px;"
+      <button type="button" class="btn btn-default btn-color" style="margin-left: 3px;margin-top:20px;"
         (click)="closeModal('delete')">Cancel</button>
     </div>
   </div>

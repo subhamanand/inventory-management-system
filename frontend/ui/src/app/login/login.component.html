@@ -21,7 +21,7 @@
             <input type="password" class="form-control" id="inputPassword" placeholder="Password"
             [(ngModel)]="password" name="password" required>
           </div>
-          <div class="form-group" style="color: darkred;" id="message"><span style="font-size: medium;">Wrong credentials</span> </div>
+          <div class="form-group" *ngIf="wrongCredentials" style="color: darkred;" id="message"><span style="font-size: medium;">Wrong credentials</span> </div>
           <button type="submit" class="btn btn-secondary" style="width: max-content;" (click)="onSubmit()"><span style="color:black;">Login</span></button>
         </form>
 

@@ -5,15 +5,10 @@ import jwt
 from . import routes
 import configparser
 from functools import wraps
-
-# from auth import token_auth
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-
-
 prefix = '/admin'
-
 
 
 def token_auth(f):
@@ -22,20 +17,27 @@ def token_auth(f):
        token = None
        print(request.headers)
        if 'x-access-token' in request.headers:
-           token = request.headers['x-access-token']
+            token = request.headers['x-access-token']
  
        if not token:
-           return jsonify({'message': 'a valid token is missing','status':401})
+            return jsonify({'message': 'a valid token is missing','status':401})
        try:
-           data = jwt.decode(token, config['AUTH']['secret_key'], algorithms=["HS256"])
-           db = get_db_conection()
-           cursor = db.cursor()
-           cursor.execute(
+            data = jwt.decode(token, config['AUTH']['secret_key'], algorithms=["HS256"])
+            db = get_db_conection()
+            cursor = db.cursor()
+            cursor.execute(
                 'SELECT * FROM user_details WHERE email_id = %s', (data['email'],))
-           user = cursor.fetchone()
-           print('user length',user)
-       except:
-           return jsonify({'message': 'token is invalid','status':401})
+            user = cursor.fetchone()
+            print('user length',user)
+
+       except pymysql.err.MySQLError:
+            return jsonify({'message': 'Database connection error','status':500})
+
+       except pymysql.err.DatabaseError:
+            return jsonify({'message': 'Database connection error','status':500})        
+
+       except Exception as e:
+            return jsonify({'message': str(e),'status':401})
  
        return f(user)
    return decorator
@@ -60,13 +62,20 @@ def register_user():
         cursor.execute(
             'INSERT INTO user_details(email_id,name,phone,age,country,password) VALUES (%s,%s,%s,%s,%s,%s)',
             (email, name, phone, age, country, password))
+        
+        db.commit()
+        return jsonify({"message": "Registered Successfully", "status": 201})
 
-        return {"message": "Registered Successfully", "status": 201}, 201
+    except pymysql.err.MySQLError:
+        return jsonify({'message': 'Database connection error','status':500})
+
+    except pymysql.err.DatabaseError:
+        return jsonify({'message': 'Database connection error','status':500})        
+
     except Exception as e:
         print(e)
-        return {"message": "Error"}, 400
+        return jsonify({"message": "Error encountered","status": 400})
     finally:
-        db.commit()
         db.close()
 
 
@@ -89,17 +98,22 @@ def user_login():
             # if account exists in user_details table
             if account:
                 encoded_data = jwt.encode({'id':account[6],'email': account[0],'name':account[2]}, config['AUTH']['secret_key'], algorithm='HS256')
-                print(encoded_data)
-                # encoded_data = encoded_data.decode('utf-8')
-                return jsonify({"encodedData":encoded_data, "status":"1"})
+                return jsonify({"encodedData":encoded_data, "status":200})
             else:
-                return {"status":"0"},200
+                return jsonify({"message":"Authorization failed","status":401})
 
+    except pymysql.err.MySQLError:
+        return jsonify({'message': 'Database connection error','status':500})
+
+    except pymysql.err.DatabaseError:
+        return jsonify({'message': 'Database connection error','status':500})        
 
     except Exception as e:
         print(e)
         db.close()
-        return "error"
+        return jsonify({"message":"Error encountered","status":500})
+    finally:
+        db.close()
 
 
 
@@ -112,7 +126,6 @@ def add_product(user):
     try:
         if request.method == 'POST':
             body = request.get_json()
-            print('req',body)
             productID = body['productID']
             productName = body['productName']
             productDescription = body['productDescription']
@@ -123,11 +136,20 @@ def add_product(user):
             cursor.execute(
                 'INSERT INTO products(id,category,name,description,units) VALUES (%s,%s,%s,%s,%s)', (productID, productCategory,productName,productDescription,int(productUnits)))
             db.commit()
-            db.close()
-            return jsonify({"status": "success"})
+            
+            return jsonify({"message": "Product created","status": 201})
+
+    except pymysql.err.MySQLError:
+        return jsonify({'message': 'Database connection error','status':500})
+
+    except pymysql.err.DatabaseError:
+        return jsonify({'message': 'Database connection error','status':500})        
+
     except Exception as e:
         print(e)
-        return jsonify({"status": "error"})
+        return jsonify({"message": str(e),"status": 500})
+    finally:
+        db.close()
 
 
 
@@ -149,11 +171,19 @@ def update_product(user):
             cursor.execute(
                 'UPDATE products set category=%s,name=%s,description=%s,units=%s where id=%s', (productCategory,productName,productDescription,int(productUnits),productID))
             db.commit()
-            db.close()
-            return jsonify({"status": "success"})
+            return jsonify({"message": "Product updated","status": 201})
+
+    except pymysql.err.MySQLError:
+        return jsonify({'message': 'Database connection error','status':500})
+
+    except pymysql.err.DatabaseError:
+        return jsonify({'message': 'Database connection error','status':500}) 
+
     except Exception as e:
         print(e)
-        return jsonify({"status": "error"})
+        return jsonify({"message": str(e),"status": 500})
+    finally:
+        db.close()
 
 
 @routes.route(prefix + '/delete_product', methods=['DELETE'])
@@ -168,11 +198,19 @@ def delete_product(user):
             cursor.execute(
                 'DELETE from products where id=%s', (productID))
             db.commit()
-            db.close()
-            return jsonify({"status": "success"})
+            return jsonify({"message": "Product deleted","status": 200})
+    
+    except pymysql.err.MySQLError:
+        return jsonify({'message': 'Database connection error','status':500})
+
+    except pymysql.err.DatabaseError:
+        return jsonify({'message': 'Database connection error','status':500}) 
+
     except Exception as e:
         print(e)
-        return jsonify({"status": "error"})
+        return jsonify({"message": str(e),"status": 500})
+    finally:
+        db.close()
 
 
 @routes.route(prefix + '/get_all_products', methods=['GET'])
@@ -186,7 +224,6 @@ def get_all_products(user):
             if request.args.get('category'):
 
                 category=request.args.get('category')
-                print('cat:',category)
                 if category =='all':
                     product_list = []
                     db = get_db_conection()
@@ -205,7 +242,7 @@ def get_all_products(user):
 
                         })
 
-                    return jsonify({"product_list": product_list})
+                    return jsonify({"product_list": product_list,"status": 200})
                 else:
                     product_list = []
                     db = get_db_conection()
@@ -224,7 +261,7 @@ def get_all_products(user):
 
                         })
 
-                    return jsonify({"product_list": product_list})
+                    return jsonify({"product_list": product_list,"status": 200})
 
             else:
                 product_list = []
@@ -245,12 +282,17 @@ def get_all_products(user):
 
                     })
 
-                return jsonify({"product_list": product_list})
+                return jsonify({"product_list": product_list,"status": 200})
                 
+    except pymysql.err.MySQLError:
+        return jsonify({'message': 'Database connection error','status':500})
+
+    except pymysql.err.DatabaseError:
+        return jsonify({'message': 'Database connection error','status':500}) 
 
     except Exception as e:
         print(e)
-        return jsonify({"status": "error"})
+        return jsonify({"message": str(e),"status": 500})
     finally:
         db.close()
 
@@ -265,8 +307,6 @@ def get_product_by_id(user):
             if request.args.get('id'):
 
                 id=request.args.get('id')
-                print('id:',id)
-
                 product_list = []
                 db = get_db_conection()
                 cursor = db.cursor()
@@ -274,12 +314,16 @@ def get_product_by_id(user):
                     "SELECT * FROM products where id= %(id)s",{'id':id})
                 products=cursor.fetchall()
 
-                return jsonify({"category": products[0][1],"name": products[0][2],"description": products[0][3],"units": products[0][4]})
+                return jsonify({"category": products[0][1],"name": products[0][2],"description": products[0][3],"units": products[0][4],"status": 200})
 
-                
+    except pymysql.err.MySQLError:
+        return jsonify({'message': 'Database connection error','status':500})
+
+    except pymysql.err.DatabaseError:
+        return jsonify({'message': 'Database connection error','status':500})                 
 
     except Exception as e:
         print(e)
-        return jsonify({"status": "error"})
+        return jsonify({"message": str(e),"status": 500})
     finally:
         db.close()
