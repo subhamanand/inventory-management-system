@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<body>
+  <div class="container" >
+ 
+    <div class="row " style="margin-top: 4%;">
+      <div class="col-md-4"></div>
+      <div class="col-md-4" id="form-div" style="background-color: #53b6cf;padding: top 0px">
+        <h3 style="padding-bottom: 12px; color: white;font-weight: bolder;" class="text-center">Inventory Management System</h3>
+        <form style="color: white;">
+          <div class="form-group">
+            <label for="inputEmail">Email address</label>
+            <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Email" 
+            [(ngModel)]="email"  name="email" required>
+            <small id="emailHelp" class="form-text text-muted"></small>
+          </div>
+          <div class="form-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" class="form-control" id="inputPassword" placeholder="Password"
+            [(ngModel)]="password" name="password" required>
+          </div>
+          <div class="form-group" *ngIf="wrongCredentials" style="color: darkred;" id="message"><span style="font-size: medium;">Wrong credentials</span> </div>
+          <button type="submit" class="btn btn-secondary" style="width: max-content;" (click)="onSubmit()"><span style="color:black;">Login</span></button>
+        </form>
+
+        <br>
+        <br>
+
+        <button class="btn btn-secondary" style="width: max-content;" (click)="goToRegisterPage();"><span style="color:black;">Go to register</span></button>
+
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div> 
+</body>
